@@ -2,7 +2,7 @@
 
 public class EntradaDiretorio
 {
-    private Dictionary<string, int> Arquivos;
+    public Dictionary<string, int> Arquivos;
 
     public EntradaDiretorio()
     {
@@ -23,5 +23,16 @@ public class EntradaDiretorio
     public void RemoverArquivo(string nomeArquivo)
     {
         Arquivos.Remove(nomeArquivo);
+    }
+    
+    public override string ToString()
+    {
+        string arquivosString = " \n Arquivos: {\n";
+        foreach (var entry in Arquivos)
+        {
+            arquivosString += $"\t{entry.Key}: {entry.Value},\n";
+        }
+        arquivosString += "}";
+        return arquivosString;
     }
 }

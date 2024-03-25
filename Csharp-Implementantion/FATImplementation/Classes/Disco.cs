@@ -2,11 +2,11 @@
 
 public class Disco
 {
-    private int QuantidadeClusters { get; set; }
-    private int BytesPorCluster { get; set; }
-    private TabelaFat TabelaFat { get; set; }
-    private EntradaDiretorio EntradaDiretorio { get; set; }
-    private AreaDeDados AreaDeDados { get; set; }
+    public int QuantidadeClusters { get; set; }
+    public int BytesPorCluster { get; set; }
+    public TabelaFat TabelaFat { get; set; }
+    public EntradaDiretorio EntradaDiretorio { get; set; }
+    public AreaDeDados AreaDeDados { get; set; }
 
     public Disco(int quantClusters, int bytesPorCluster)
     {
@@ -19,7 +19,7 @@ public class Disco
 
     public void AdicionarArquivo(string nomeArquivo, byte[] dados)
     {
-        int clustersNecessarios = dados.Length / BytesPorCluster;
+        int clustersNecessarios = (int)Math.Ceiling((double)dados.Length / BytesPorCluster);
         byte[][] dadosDividos = DividirDadosPorClusters(clustersNecessarios, dados);
         if (!TabelaFat.PodeArmazenarsNClusters(clustersNecessarios) ||
             !AreaDeDados.PodeArmazenarNClusters(clustersNecessarios))
@@ -84,10 +84,11 @@ public class Disco
             Console.WriteLine($"Não foi possível encontrar o arquivo: {nomeArquivo}");
             return;
         }
-        
+
         AreaDeDados.LimparDados(clusterInicial);
         EntradaFat entradaCluster = TabelaFat.RetornarEntrada(clusterInicial);
-        
+        TabelaFat.LimparEntrada(clusterInicial);
+
         while (entradaCluster is { FlagFimArquivo: false, ProximoCluster: not null })
         {
             int proximoCluster = (int)entradaCluster.ProximoCluster;
@@ -96,7 +97,7 @@ public class Disco
             AreaDeDados.LimparDados(proximoCluster);
             TabelaFat.LimparEntrada(proximoCluster);
         }
-        
+
         EntradaDiretorio.RemoverArquivo(nomeArquivo);
     }
 
@@ -104,18 +105,27 @@ public class Disco
     private byte[][] DividirDadosPorClusters(int clustersNecessarios, byte[] dados)
     {
         var result = new byte[clustersNecessarios][];
+        
         for (int i = 0; i < clustersNecessarios; i++)
         {
-            var divisao = new List<byte>();
-            for (int j = 0; j < BytesPorCluster; j++)
+            int offset =  Math.Min(BytesPorCluster, dados.Length - i * BytesPorCluster);
+            var divisao = new byte[offset];
+        
+            for (int j = 0; j < offset; j++)
             {
                 int indice = i * BytesPorCluster + j;
-                divisao.Add(dados[indice]);
+                divisao[j] = dados[indice];
             }
 
-            result[i] = divisao.ToArray();
+            result[i] = divisao;
         }
 
         return result;
+    }
+
+    public override string ToString()
+    {
+        return
+            $"QuantidadeClusters: {QuantidadeClusters}, BytesPorCluster: {BytesPorCluster}, TabelaFat: {TabelaFat}, EntradaDiretorio: {EntradaDiretorio}, AreaDeDados: {AreaDeDados}";
     }
 }

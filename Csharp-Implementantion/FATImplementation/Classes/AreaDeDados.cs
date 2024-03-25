@@ -2,8 +2,8 @@
 
 public class AreaDeDados
 {
-    private Dictionary<int, byte[]?> Clusters; 
-    private int ClustersLivres { get; set; }
+    public Dictionary<int, byte[]?> Clusters; 
+    public int ClustersLivres { get; set; }
     // Construtor
     public AreaDeDados(int quantClusters, int bytesPorCluster)
     {
@@ -38,11 +38,23 @@ public class AreaDeDados
 
     public void LimparDados(int numeroCluster)
     {
+        ClustersLivres++;
         Clusters[numeroCluster] = null;
     }
         
     public int RetornarProximoClusterLivre()
     {
         return Clusters.FirstOrDefault(entry => entry.Value == null).Key;
+    }
+    
+    public override string ToString()
+    {
+        string clustersString = "Clusters: {\n";
+        foreach (var entry in Clusters)
+        {
+            clustersString += $"\t{entry.Key}: {entry.Value},\n";
+        }
+        clustersString += string.Format("}}, ClustersLivres: {0}", ClustersLivres);
+        return clustersString;
     }
 }

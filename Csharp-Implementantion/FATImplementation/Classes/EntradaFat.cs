@@ -10,4 +10,9 @@ public class EntradaFat
         ProximoCluster = proximoCluster;
         FlagFimArquivo = flagFimArquivo;
     }
+    
+    public override string ToString()
+    {
+        return $"ProximoCluster: {ProximoCluster}, FlagFimArquivo: {FlagFimArquivo}";
+    }
 }
