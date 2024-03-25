@@ -79,7 +79,7 @@ public class Disco
     public void RemoverArquivo(string nomeArquivo)
     {
         int clusterInicial = EntradaDiretorio.ResgatarInicioArquivo(nomeArquivo);
-        if (clusterInicial == -1)
+        if (clusterInicial == 0)
         {
             Console.WriteLine($"Não foi possível encontrar o arquivo: {nomeArquivo}");
             return;
@@ -124,7 +124,7 @@ public class Disco
     }
 
     public override string ToString()
-    {
+    {   
         return
             $"QuantidadeClusters: {QuantidadeClusters}, BytesPorCluster: {BytesPorCluster}, TabelaFat: {TabelaFat}, EntradaDiretorio: {EntradaDiretorio}, AreaDeDados: {AreaDeDados}";
     }

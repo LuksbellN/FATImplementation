@@ -5,7 +5,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        var disco = new Disco(100, 2);
+        var disco = new Disco(75, 2);
         var arquivo = new byte[]
         {
             0x4f, 0x6c, 0x61, 0x20, 0x6d, 0x75, 0x6e, 0x64, 0x6f, 0x21
@@ -13,7 +13,7 @@ class Program
         string nomeArquivo = "Teste.txt";
 
         disco.AdicionarArquivo(nomeArquivo, arquivo);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo) ?? []));
 
         var arquivo2 = new byte[]
         {
@@ -22,7 +22,7 @@ class Program
         string nomeArquivo2 = "Teste2.txt";
 
         disco.AdicionarArquivo(nomeArquivo2, arquivo2);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo2)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo2) ?? []));
 
         var arquivo3 = new byte[]
         {
@@ -32,7 +32,7 @@ class Program
         string nomeArquivo3 = "Teste3.txt";
 
         disco.AdicionarArquivo(nomeArquivo3, arquivo3);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo3)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo3) ?? []));
 
         var arquivo4 = new byte[]
         {
@@ -41,7 +41,7 @@ class Program
         string nomeArquivo4 = "Teste4.txt";
 
         disco.AdicionarArquivo(nomeArquivo4, arquivo4);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo4)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo4) ?? []));
 
         var arquivo5 = new byte[]
         {
@@ -51,7 +51,7 @@ class Program
         string nomeArquivo5 = "Teste5.txt";
 
         disco.AdicionarArquivo(nomeArquivo5, arquivo5);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo5)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo5) ?? []));
 
         disco.RemoverArquivo(nomeArquivo2);
 
@@ -63,7 +63,9 @@ class Program
         string nomeArquivo6 = "Teste6.txt";
 
         disco.AdicionarArquivo(nomeArquivo6, arquivo6);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo6)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo6) ?? []));
+
+        disco.RemoverArquivo(nomeArquivo4);
 
         var arquivo7 = new byte[]
         {
@@ -74,7 +76,7 @@ class Program
         string nomeArquivo7 = "Teste7.txt";
 
         disco.AdicionarArquivo(nomeArquivo7, arquivo7);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo7)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo7) ?? []));
 
         disco.RemoverArquivo(nomeArquivo5);
 
@@ -85,7 +87,9 @@ class Program
         string nomeArquivo8 = "Teste8.txt";
 
         disco.AdicionarArquivo(nomeArquivo8, arquivo8);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo8)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo8) ?? []));
+        
+        disco.RemoverArquivo(nomeArquivo5);
 
         var arquivo9 = new byte[]
         {
@@ -95,7 +99,7 @@ class Program
         string nomeArquivo9 = "Teste9.txt";
 
         disco.AdicionarArquivo(nomeArquivo9, arquivo9);
-        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo9)!));
+        Console.WriteLine(Encoding.UTF8.GetString(disco.RetornarArquivo(nomeArquivo9) ?? []));
         
 
         Console.WriteLine(disco);

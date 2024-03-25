@@ -14,7 +14,7 @@ typedef struct {
 } AreaDados;
 
 typedef struct {
-    int* tabelaFAT;
+    int* tabela;
     int clustersLivres;
     int totalClusters;
 } TabelaFAT;
@@ -47,12 +47,12 @@ void inicializarAreaDados(AreaDados* areaDados, int numClusters, int tamanhoClus
 }
 
 void inicializarTabelaFAT(TabelaFAT* tabelaFAT, int numClusters) {
-    tabelaFAT->tabelaFAT = malloc(numClusters * sizeof(int));
+    tabelaFAT->tabela = malloc(numClusters * sizeof(int));
     tabelaFAT->clustersLivres = numClusters;
     tabelaFAT->totalClusters = numClusters;
 
     for (int i = 0; i < numClusters; i++) {
-        tabelaFAT->tabelaFAT[i] = -1;
+        tabelaFAT->tabela[i] = -1;
     }
 }
 
@@ -69,7 +69,7 @@ void inicializarDisco(Disco* disco, int numClusters, int tamanhoCluster) {
 
 int encontrarProximoClusterLivre(TabelaFAT* tabelaFAT) {
     for (int i = 0; i < tabelaFAT->totalClusters; i++) {
-        if (tabelaFAT->tabelaFAT[i] == -1) {
+        if (tabelaFAT->tabela[i] == -1) {
             return i;
         }
     }
@@ -85,6 +85,7 @@ void adicionarEntradaAoDiretorio(Diretorio* diretorio, char* nomeArquivo, int cl
 }
 
 void removerEntradaDoDiretorio(Diretorio* diretorio, char* nomeArquivo) {
+    // Percorrer entradas do diretorio 
     for (int i = 0; i < diretorio->numEntradas; i++) {
         if (strcmp(diretorio->entradas[i].nomeArquivo, nomeArquivo) == 0) {
             free(diretorio->entradas[i].nomeArquivo);
@@ -117,7 +118,7 @@ void adicionarDadosAoDisco(Disco* disco, char* nomeArquivo, unsigned char* dados
         clusters[i] = numeroCluster;
         int tamanhoDados = (i == numClusters - 1) ? tamanho % disco->areaDados.totalClusters : disco->areaDados.totalClusters;
         escreverDadosNoCluster(&disco->areaDados.clusters[numeroCluster], dados + i * disco->areaDados.totalClusters, tamanhoDados);
-        disco->tabelaFAT.tabelaFAT[numeroCluster] = (i == numClusters - 1) ? -1 : encontrarProximoClusterLivre(&disco->tabelaFAT);
+        disco->tabelaFAT.tabela[numeroCluster] = (i == numClusters - 1) ? -1 : encontrarProximoClusterLivre(&disco->tabelaFAT);
         disco->tabelaFAT.clustersLivres--;
         disco->areaDados.clustersLivres--;
     }
@@ -140,7 +141,7 @@ unsigned char* lerDadosDoDisco(Disco* disco, char* nomeArquivo, int* tamanho) {
                 dados = realloc(dados, tamanhoDados + tamanhoCluster);
                 memcpy(dados + tamanhoDados, cluster.dados, tamanhoCluster);
                 tamanhoDados += tamanhoCluster;
-                numeroCluster = disco->tabelaFAT.tabelaFAT[numeroCluster];
+                numeroCluster = disco->tabelaFAT.tabela[numeroCluster];
             }
 
             if (tamanho != NULL)
@@ -161,10 +162,10 @@ void removerDadosDoDisco(Disco* disco, char* nomeArquivo) {
             while (numeroCluster != -1) {
                 Cluster cluster = disco->areaDados.clusters[numeroCluster];
                 limparCluster(&cluster);
-                disco->tabelaFAT.tabelaFAT[numeroCluster] = -1;
+                disco->tabelaFAT.tabela[numeroCluster] = -1;
                 disco->tabelaFAT.clustersLivres++;
                 disco->areaDados.clustersLivres++;
-                numeroCluster = disco->tabelaFAT.tabelaFAT[numeroCluster];
+                numeroCluster = disco->tabelaFAT.tabela[numeroCluster];
             }
 
             removerEntradaDoDiretorio(&disco->diretorio, nomeArquivo);
@@ -175,7 +176,7 @@ void removerDadosDoDisco(Disco* disco, char* nomeArquivo) {
 
 int main() {
     Disco disco;
-    inicializarDisco(&disco, 200, 2);
+    inicializarDisco(&disco, 200, 4);
 
     char* nomeArquivo1 = "Teste.txt";
     unsigned char dados1[] = {0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x6D, 0x75, 0x6E, 0x64, 0x6F};
