@@ -5,7 +5,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        var disco = new Disco(75, 2);
+        // Inicializando disco
+        int quantClusters = 100;
+        int bytesPorClusters = 4;
+        
+        var disco = new Disco(quantClusters, bytesPorClusters);
+        
+        // Operações em arquivos
         var arquivo = new byte[]
         {
             0x4f, 0x6c, 0x61, 0x20, 0x6d, 0x75, 0x6e, 0x64, 0x6f, 0x21

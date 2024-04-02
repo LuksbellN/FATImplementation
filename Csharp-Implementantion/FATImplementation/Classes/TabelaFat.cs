@@ -9,6 +9,7 @@ public class TabelaFat
         QuantidadeClustersLivres = quantClustersLivres;
         Table = new Dictionary<int, EntradaFat>();
         Table.EnsureCapacity(quantClustersLivres);
+        // 2 primeiros clusters reservados  
         for (int i = 2; i < quantClustersLivres; i++)
         {
             Table[i] = new EntradaFat(0, false);
